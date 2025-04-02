@@ -18,7 +18,7 @@ namespace CoffeeSalon.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Detail()
         {
             return View();
         }
