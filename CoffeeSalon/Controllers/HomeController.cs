@@ -1,7 +1,10 @@
 using System.Diagnostics;
+using CoffeeSalon.Data;
 using CoffeeSalon.Models;
+using CoffeeSalon.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using UsersApp.ViewModels;
 
 namespace CoffeeSalon.Controllers
@@ -9,14 +12,13 @@ namespace CoffeeSalon.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        //private readonly SignInManager<Users> signInManager;
-        //private readonly UserManager<Users> userManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IUsersServices _userServices;
+
+        public HomeController(ILogger<HomeController> logger, IUsersServices userServices)
         {
             _logger = logger;
-            //this.signInManager = signInManager;
-            //this.userManager = userManager;
+            _userServices = userServices;
         }
 
         public IActionResult Index()
@@ -49,22 +51,23 @@ namespace CoffeeSalon.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public IActionResult Login(LoginViewModel model)
         {
-            //if (ModelState.IsValid)
-            //{
-            //    var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+            if (ModelState.IsValid)
+            {
+                var result = _userServices.Login(model.Email, model.Password);
 
-            //    if (result.Succeeded)
-            //    {
-            //        return RedirectToAction("Index", "Home");
-            //    }
-            //    else
-            //    {
-            //        ModelState.AddModelError("", "Email or password is incorrect.");
-            //        return View(model);
-            //    }
-            //}
+                if (result)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Email or password is incorrect.");
+                    return View(model);
+                }
+            }
+
             return View(model);
         }
 

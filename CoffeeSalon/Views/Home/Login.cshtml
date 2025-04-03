@@ -26,17 +26,13 @@
                     Forgot password?
                 </a>
             </div>
-            <div class="form-check mb-3">
-                <label class="form-check-label">
-                    <input asp-for="RememberMe" class="form-check-input" />
-                    @Html.DisplayNameFor(a=> a.RememberMe)
-                </label>
+            <div class="mb-3">
+                <a asp-controller="Home" asp-action="Register" class="text-decoration-none">Register</a>
             </div>
+
             <input type="submit" value="Login" class="btn btn-success w-100 p-2" />
-            <p class="text-center mt-2">
-                Don't have an account? <a asp-controller="Home" asp-action="Register" class="text-decoration-none">Register</a>
-            </p>
-            <div class="text-center">
+
+            <div class="text-center mt-4">
                 <a asp-controller="Home" asp-action="Index" class="text-decoration-none mt-3">Back</a>
             </div>
         </form>
