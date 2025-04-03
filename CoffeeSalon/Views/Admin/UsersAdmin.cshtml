@@ -1,0 +1,32 @@
+﻿@model IEnumerable<CoffeeSalon.Models.User>
+@{
+    ViewData["Title"] = "Admin";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Manage Users</h1>
+<table>
+    <thead>
+        <tr>
+            <th>User ID</th>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+		@foreach (var user in Model)
+		{
+			<tr>
+				<td>@user.UserId</td>
+				<td>@user.Username</td>
+				<td>@user.Role</td>
+				<td>
+					<a href="@Url.Action("SetAsAdmin", "Admin", new { userId = user.UserId })" class="edit-btn">Set as admin</a>
+					<a href="@Url.Action("SetAsUser", "Admin", new { userId = user.UserId })" class="edit-btn">Set as user</a>
+					<a href="@Url.Action("DeleteUser", "Admin", new { userId = user.UserId })" class="delete-btn">Delete</a>
+				</td>
+			</tr>
+		}
+    </tbody>
+</table>

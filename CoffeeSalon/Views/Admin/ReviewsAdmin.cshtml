@@ -1,0 +1,39 @@
+﻿@model IEnumerable<CoffeeSalon.Models.Review>
+@{
+    ViewData["Title"] = "Admin";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Manage Reviews</h1>
+<a href="@Url.Action("AddReviewInAdmin", "Admin")" class="edit-btn">+ Add Review</a>
+<table>
+    <thead>
+        <tr>
+            <th>Review ID</th>
+            <th>User</th>
+            <th>Item</th>
+            <th>Rating</th>
+            <th>Date</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+		@foreach (var review in Model)
+		{
+			<tr>
+				<td>@review.ReviewId</td>
+				<td>@review?.User?.Username</td>
+				<td>@review?.ItemName</td>
+				<td>@review?.Rating</td>
+                <td>@review?.DatePosted.ToString("yyyy-MM-dd")</td>
+				<td></td>
+				<td>
+                    <a href="@Url.Action("UpdateReview", "Admin", new { review = review })" class="edit-btn">Edit</a>
+                    <a href="@Url.Action("DeleteReview", "Admin", new { review = review })" class="delete-btn">Delete</a>
+				</td>
+			</tr>
+		}
+
+    </tbody>
+</table>

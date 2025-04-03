@@ -15,6 +15,7 @@ namespace CoffeeSalon
 
             builder.Services.AddDbContext<AppDbContext>(options =>options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<IUsersServices, UserServices>();
+            builder.Services.AddScoped<IReviewService, ReviewService>();
 
             builder.Services.AddSession(); 
             var app = builder.Build();

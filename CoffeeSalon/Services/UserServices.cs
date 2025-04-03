@@ -12,6 +12,73 @@ namespace CoffeeSalon.Services
             _context = appDbContext;
         }
 
+        public Result<List<User>> GetUserList() 
+        {
+            var list = _context.Users.ToList();
+            var result = new Result<List<User>>();
+
+            result.Value = list;
+
+            return result;
+        }
+
+        public Result SetAsAdmin(string userId)
+        {
+            var id = int.Parse(userId);
+
+            var result = new Result();
+            // Find the user by ID
+            var user = _context.Users.FirstOrDefault(u => u.UserId == id);
+            if (user == null)
+            {
+                result.IsSuccess = false;
+                return result; // User not found
+            }
+            // Set the user's role to "admin"
+            user.Role = "admin";
+            // Save changes to the database
+            _context.SaveChanges();
+            result.IsSuccess = true;
+            return result;
+        }
+
+        public Result SetAsUser(string userId)
+        {
+            var id = int.Parse(userId);
+            var result = new Result();
+            // Find the user by ID
+            var user = _context.Users.FirstOrDefault(u => u.UserId == id);
+            if (user == null)
+            {
+                result.IsSuccess = false;
+                return result; // User not found
+            }
+            // Set the user's role to "user"
+            user.Role = "user";
+            // Save changes to the database
+            _context.SaveChanges();
+            result.IsSuccess = true;
+            return result;
+        }
+
+
+        public Result DeleteUser(string userId)
+        {
+            var id = int.Parse(userId);
+            var result = new Result();
+            // Find the user by ID
+            var user = _context.Users.FirstOrDefault(u => u.UserId == id);
+            if (user == null)
+            {
+                result.IsSuccess = false;
+                return result; // User not found
+            }
+            // Remove the user from the database
+            _context.Users.Remove(user);
+            _context.SaveChanges();
+            result.IsSuccess = true;
+            return result;
+        }
 
 
         public Result Login(string username, string password)

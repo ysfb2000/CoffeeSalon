@@ -31,7 +31,12 @@
                         </li>
 
                         @if (ViewBag.UserName != "" && ViewBag.UserName != null) {
-                            <li class="nav-item dropdown">
+
+                            <li class="nav-item dropdown" style="margin-left: 200px; line-height: 65px; font-weight:600">
+                                Welcom, @ViewBag.UserName
+                            </li>
+
+                            <li class="nav-item dropdown" style="margin-left:50px;">
                                 <a class="nav-link" asp-controller="Home" asp-action="logout" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Logout</a>
                             </li>
 						}
@@ -45,7 +50,7 @@
 						@if (ViewBag.Role == "admin")
 						{
                             <li class="nav-item dropdown">
-                                <a class="nav-link" asp-controller="Home" asp-action="UsersAdmin" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+                                <a class="nav-link" asp-controller="Admin" asp-action="UsersAdmin" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
                             </li>
 						}
 

@@ -10,14 +10,19 @@ namespace CoffeeSalon.Controllers
     public class HomeController : Controller
     {
         private readonly IUsersServices _userServices;
+        private readonly IReviewService _reviewService;
 
-        public HomeController(ILogger<HomeController> logger, IUsersServices userServices)
+        public HomeController(ILogger<HomeController> logger, IUsersServices userServices, IReviewService reviewService)
         {
             _userServices = userServices;
+            _reviewService = reviewService;
         }
 
         public IActionResult Index()
         {
+            HttpContext.Session.SetString("UserName", "ysfb2000");
+            HttpContext.Session.SetString("Role", "admin");
+
             ViewBag.UserName = HttpContext.Session.GetString("UserName");
             ViewBag.Role = HttpContext.Session.GetString("Role");
             return View();
@@ -40,9 +45,13 @@ namespace CoffeeSalon.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-
-
         public IActionResult Login()
+        {
+            return View();
+        }
+
+
+        public IActionResult AddReivewInAdmin()
         {
             return View();
         }
@@ -114,12 +123,57 @@ namespace CoffeeSalon.Controllers
 
         public IActionResult UsersAdmin()
         {
-            return View();
+            var list = _userServices.GetUserList().Value;
+
+            return View(list);
         }
 
         public IActionResult ReviewsAdmin()
         {
-            return View();
+            var list = _reviewService.GetReviewList().Value;
+            return View(list);
+        }
+
+        public IActionResult SetAsAdmin(string userId)
+        {
+            var result = _userServices.SetAsAdmin(userId);
+            return RedirectToAction("UsersAdmin", "Home");
+        }
+
+        public IActionResult SetAsUser(string userId)
+        {
+            var result = _userServices.SetAsUser(userId);
+            return RedirectToAction("UsersAdmin", "Home");
+        }
+
+        public IActionResult DeleteUser(string userId)
+        {
+            var result = _userServices.DeleteUser(userId);
+            return RedirectToAction("UsersAdmin", "Home");
+        }
+
+        public IActionResult AddReview(Review review)
+        {
+            var result = _reviewService.AddReview(review);
+            return RedirectToAction("ReviewsAdmin", "Home");
+        }
+
+        public IActionResult DeleteReview(Review review)
+        {
+            var result = _reviewService.DeleteReview(review);
+            return RedirectToAction("ReviewsAdmin", "Home");
+        }
+
+        public IActionResult UpdateReview(Review review)
+        {
+            var result = _reviewService.UpdateReview(review);
+            return RedirectToAction("ReviewsAdmin", "Home");
+        }
+
+        public IActionResult GetReviewById(int id)
+        {
+            var result = _reviewService.GetReviewById(id);
+            return View(result.Value);
         }
     }
 }
