@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Admin";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Manage Reviews</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Review ID</th>
+            <th>User</th>
+            <th>Item</th>
+            <th>Rating</th>
+            <th>Date</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>101</td>
+            <td>coffeeFan</td>
+            <td>Starbucks Latte</td>
+            <td>5</td>
+            <td>2025-04-01</td>
+            <td><img src="latte.jpg" width="50" /></td>
+            <td>
+                <button class="edit-btn">Edit</button>
+                <button class="delete-btn">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

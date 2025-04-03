@@ -1,3 +1,7 @@
+using CoffeeSalon.Data;
+using CoffeeSalon.Services;
+using Microsoft.EntityFrameworkCore;
+
 namespace CoffeeSalon
 {
     public class Program
@@ -9,7 +13,11 @@ namespace CoffeeSalon
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddDbContext<AppDbContext>(options =>options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddScoped<IUsersServices, UserServices>();
             var app = builder.Build();
+
+            
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
