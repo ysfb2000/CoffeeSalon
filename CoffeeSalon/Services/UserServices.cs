@@ -4,7 +4,7 @@ namespace CoffeeSalon.Services
 {
     public class UserServices : IUsersServices
     {
-        private readonly AppDbContext  _context;
+        private readonly AppDbContext _context;
 
         public UserServices(AppDbContext appDbContext)
         {
@@ -13,10 +13,10 @@ namespace CoffeeSalon.Services
 
 
 
-        public bool Login(string email, string password)
+        public bool Login(string username, string password)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Username == email);
-            
+            var user = _context.Users.FirstOrDefault(u => u.Username == username);
+
             if (user == null)
             {
                 return false;
@@ -32,5 +32,36 @@ namespace CoffeeSalon.Services
 
             return true;
         }
+
+        /// <summary>
+        /// Register a new user
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public bool Register(string username, string password)
+        {
+            // Check if the user already exists
+            var existingUser = _context.Users.FirstOrDefault(u => u.Username == username);
+            if (existingUser != null)
+            {
+                return false; // User already exists
+            }
+            // Create a new user
+            var newUser = new Models.User()
+            {
+                Username = username,
+                PasswordHash = Utilities.GetMd5Hash(password),
+                // Set default role to "user"
+                Role = "user"
+            };
+
+            // Add the new user to the database
+            _context.Users.Add(newUser);
+
+            _context.SaveChanges();
+            return true;
+        }
+
     }
 }

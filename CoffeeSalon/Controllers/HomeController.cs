@@ -55,7 +55,7 @@ namespace CoffeeSalon.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = _userServices.Login(model.Email, model.Password);
+                var result = _userServices.Login(model.UserName, model.Password);
 
                 if (result)
                 {
@@ -63,7 +63,7 @@ namespace CoffeeSalon.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Email or password is incorrect.");
+                    ModelState.AddModelError("", "User name or password is incorrect.");
                     return View(model);
                 }
             }

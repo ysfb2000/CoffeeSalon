@@ -2,6 +2,6 @@
 {
     public interface IUsersServices
     {
-        public bool Login(string email, string password);
+        public bool Login(string username, string password);
     }
 }
