@@ -1,7 +1,11 @@
-﻿namespace CoffeeSalon.Services
+﻿using CoffeeSalon.Models;
+
+namespace CoffeeSalon.Services
 {
     public interface IUsersServices
     {
-        public bool Login(string username, string password);
+        public Result Login(string username, string password);
+
+        public Result Register(string username, string password);
     }
 }

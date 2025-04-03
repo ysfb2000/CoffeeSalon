@@ -1,4 +1,5 @@
 ﻿using CoffeeSalon.Data;
+using CoffeeSalon.Models;
 
 namespace CoffeeSalon.Services
 {
@@ -13,13 +14,15 @@ namespace CoffeeSalon.Services
 
 
 
-        public bool Login(string username, string password)
+        public Result Login(string username, string password)
         {
             var user = _context.Users.FirstOrDefault(u => u.Username == username);
+            var result = new Result();
 
             if (user == null)
             {
-                return false;
+                result.IsSuccess = false;
+                return result;
             }
 
             // Check if the password encrypted with md5 is correct
@@ -27,10 +30,13 @@ namespace CoffeeSalon.Services
 
             if (user.PasswordHash != passwordHash)
             {
-                return false;
+                result.IsSuccess = false;
+                return result;
             }
 
-            return true;
+            result.Value = user.Role;
+
+            return result;
         }
 
         /// <summary>
@@ -39,13 +45,16 @@ namespace CoffeeSalon.Services
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public bool Register(string username, string password)
+        public Result Register(string username, string password)
         {
+            var result = new Result();
+
             // Check if the user already exists
             var existingUser = _context.Users.FirstOrDefault(u => u.Username == username);
             if (existingUser != null)
             {
-                return false; // User already exists
+                result.IsSuccess = true;
+                return result; // User already exists
             }
             // Create a new user
             var newUser = new Models.User()
@@ -60,7 +69,7 @@ namespace CoffeeSalon.Services
             _context.Users.Add(newUser);
 
             _context.SaveChanges();
-            return true;
+            return result;
         }
 
     }

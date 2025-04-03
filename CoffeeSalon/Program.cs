@@ -15,9 +15,13 @@ namespace CoffeeSalon
 
             builder.Services.AddDbContext<AppDbContext>(options =>options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<IUsersServices, UserServices>();
+
+            builder.Services.AddSession(); 
             var app = builder.Build();
 
             
+            
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -27,6 +31,7 @@ namespace CoffeeSalon
                 app.UseHsts();
             }
 
+            app.UseSession();              // Add this before UseRouting()
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
