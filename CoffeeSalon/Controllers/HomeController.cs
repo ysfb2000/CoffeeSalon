@@ -3,6 +3,7 @@ using CoffeeSalon.Data;
 using CoffeeSalon.Models;
 using CoffeeSalon.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using UsersApp.ViewModels;
 
 namespace CoffeeSalon.Controllers
@@ -20,19 +21,26 @@ namespace CoffeeSalon.Controllers
 
         public IActionResult Index()
         {
-            HttpContext.Session.SetString("UserName", "ysfb2000");
-            HttpContext.Session.SetString("Role", "admin");
-            HttpContext.Session.SetString("UserId", "1");
+            //HttpContext.Session.SetString("UserName", "ysfb2000");
+            //HttpContext.Session.SetString("Role", "admin");
+            //HttpContext.Session.SetString("UserId", "1");
 
+            // You can also use ViewBag to store session data if needed
             ViewBag.UserName = HttpContext.Session.GetString("UserName");
             ViewBag.Role = HttpContext.Session.GetString("Role");
             ViewBag.UserId = HttpContext.Session.GetString("UserId");
-            return View();
-        }
 
-        public IActionResult Detail()
-        {
-            return View();
+            // Get the result of the reviews
+            var reviewsResult = _reviewService.GetReviewList();
+
+            // Check if the result is successful and contains reviews
+            if (reviewsResult.IsSuccess && reviewsResult.Value != null)
+            {
+                return View(reviewsResult.Value);  // Pass the list of reviews to the view
+            }
+
+            // If unsuccessful or no reviews found, pass an empty list
+            return View(new List<Review>());
         }
 
         //Added Contact Page Action 
@@ -55,6 +63,14 @@ namespace CoffeeSalon.Controllers
 
         public IActionResult AddReivewInAdmin()
         {
+            return View();
+        }
+
+        public IActionResult AddReviewInUser()
+        {
+            ViewBag.UserName = HttpContext.Session.GetString("UserName");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+            ViewBag.UserId = HttpContext.Session.GetString("UserId");
             return View();
         }
 
@@ -178,5 +194,54 @@ namespace CoffeeSalon.Controllers
             var result = _reviewService.GetReviewById(id);
             return View(result.Value);
         }
+
+
+        // POST: /Review/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Review review, IFormFile? ImageFile)
+        {
+            if (ModelState.IsValid)
+            {
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    using var memoryStream = new MemoryStream();
+                    await ImageFile.CopyToAsync(memoryStream);
+                    review.Image = memoryStream.ToArray();
+                }
+
+                review.DatePosted = DateTime.Now;
+                review.UserId = int.Parse(HttpContext.Session.GetString("UserId") ?? "");
+
+                _reviewService.AddReview(review);
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(review);
+        }
+
+        public IActionResult Detail(int id)
+        {
+            ViewBag.UserName = HttpContext.Session.GetString("UserName");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+            ViewBag.UserId = HttpContext.Session.GetString("UserId");
+
+            // Fetch the review details by ReviewId
+            var result = _reviewService.GetReviewById(id);
+
+            if (!result.IsSuccess || result.Value == null)
+            {
+                return NotFound(); // Return a 404 if the review is not found
+            }
+
+            // Extract the Review object from Result<Review>
+            var review = result.Value;
+
+            // Pass only the Review object to the view
+            return View(review);
+        }
+
+
     }
 }

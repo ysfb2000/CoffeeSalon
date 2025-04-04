@@ -18,6 +18,10 @@ namespace CoffeeSalon.Controllers
 
         public IActionResult AddReviewInAdmin()
         {
+            ViewBag.UserName = HttpContext.Session.GetString("UserName");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+            ViewBag.UserId = HttpContext.Session.GetString("UserId");
+
             var review = new Review
             {
                 ItemName = string.Empty,
@@ -32,6 +36,10 @@ namespace CoffeeSalon.Controllers
 
         public IActionResult UsersAdmin()
         {
+            ViewBag.UserName = HttpContext.Session.GetString("UserName");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+            ViewBag.UserId = HttpContext.Session.GetString("UserId");
+
             var list = _userServices.GetUserList().Value;
 
             return View(list);
@@ -39,6 +47,10 @@ namespace CoffeeSalon.Controllers
 
         public IActionResult ReviewsAdmin()
         {
+            ViewBag.UserName = HttpContext.Session.GetString("UserName");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+            ViewBag.UserId = HttpContext.Session.GetString("UserId");
+
             var list = _reviewService.GetReviewList().Value;
             return View(list);
         }
@@ -63,7 +75,7 @@ namespace CoffeeSalon.Controllers
 
         public IActionResult AddReview(Review review)
         {
-            
+
             return RedirectToAction("ReviewsAdmin", "Admin");
         }
 

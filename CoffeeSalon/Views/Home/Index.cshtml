@@ -1,6 +1,10 @@
-﻿@{
+﻿@model IEnumerable<CoffeeSalon.Models.Review>
+
+@{
     ViewData["Title"] = "Home Page";
 }
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
 
 <!-- start of banner -->
 <div class="banner text-center">
@@ -125,158 +129,77 @@
             </aside>
             <div class="col-lg-8 mb-5 mb-lg-0">
                 <h2 class="h5 section-title">Recent Reviews</h2>
-                <article class="card mb-4">
-                    <div class="row card-body">
-                        <div class="col-md-4 mb-4 mb-md-0">
-                            <div class="post-slider slider-sm">
-                                <img src="images/post/post-10.jpg" class="card-img" alt="post-thumb" style="height:200px; object-fit: cover;">
-                                <img src="images/post/post-1.jpg" class="card-img" alt="post-thumb" style="height:200px; object-fit: cover;">
+
+                @foreach (var review in Model.OrderByDescending(r => r.DatePosted))
+                {
+                    <article class="card mb-4">
+                        <div class="row card-body">
+                            <div class="col-md-4 mb-4 mb-md-0">
+                                <!-- Assuming the review might have an image -->
+                                <div class="post-slider slider-sm"> 
+                                    <img src="@review?.Image" class="card-img" alt="review-thumb" style="height:200px; object-fit: cover;"> 
+                                </div> 
+
+                                <!-- Display Image -->
+                                @if (review?.Image != null && review.Image.Length > 0)
+                                {
+                                    <div class="post-slider slider-sm">
+                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(review.Image)" class="card-img" alt="review-thumb" style="height:200px; object-fit: cover;">
+                                    </div>
+                                }
+                                else
+                                {
+                                    @* <div class="post-slider slider-sm"> *@
+                                    @*     <img src="path/to/default-image.jpg" class="card-img" alt="review-thumb" style="height:200px; object-fit: cover;"> *@
+                                    @* </div> *@
+                                }
+
+
+                            </div>
+                            <div class="col-md-8">
+                                <!-- Title or Review Content -->
+                                <h3 class="h4 mb-3">
+                                    <a class="post-title" href="@Url.Action("Detail", "Home", new { id = review?.ReviewId })">
+                                        @review?.ItemName
+                                    </a>
+                                </h3>
+
+                                <ul class="card-meta list-inline">
+                                    <li class="list-inline-item"> 
+                                        <a href="@Url.Action("UserDetails", "User", new { username = review?.User?.Username })" class="card-meta-author"> 
+                                            @* <img src="@review?.User?.UserId" alt="User Image">  *@
+                                            <span>@review?.User?.Username</span> 
+                                        </a> 
+                                    </li> 
+                                    <li class="list-inline-item">
+                                        <i class="ti-calendar"></i> @review?.DatePosted.ToString("dd MMM, yyyy")
+                                    </li>
+                                </ul>
+
+                                <!-- Rating Stars (Full Stars Only) -->
+                                <div class="review-rating mb-2">
+                                    @for (var i = 1; i <= 5; i++)
+                                    {
+                                        @if (i <= review?.Rating)
+                                        {
+                                            <i class="fas fa-star" style="color: gold;"></i> <!-- Full Star -->
+                                        }
+                                        else
+                                        {
+                                            <i class="far fa-star" style="color: gold;"></i> <!-- Empty Star -->
+                                        }
+                                    }
+                                </div>
+
+                                <!-- Review Content/Description -->
+                                <p>@review?.ReviewText</p>
+
+                                <!-- Read More Link -->
+                                <a href="@Url.Action("Detail", "Home", new { id = review?.ReviewId })" class="btn btn-outline-primary">Read More</a>
                             </div>
                         </div>
-                        <div class="col-md-8">
-                            <h3 class="h4 mb-3"><a class="post-title" href="post-elements.html">Elements That You Can Use In This Template.</a></h3>
-                            <ul class="card-meta list-inline">
-                                <li class="list-inline-item">
-                                    <a href="author-single.html" class="card-meta-author">
-                                        <img src="images/john-doe.jpg" alt="John Doe">
-                                        <span>John Doe</span>
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <i class="ti-calendar"></i>15 jan, 2020
-                                </li>
-                            </ul>
-                            <p>Heading example Here is example of hedings. You can use this heading by following markdownify rules.</p>
-                            <a href="post-elements.html" class="btn btn-outline-primary">Read More</a>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="card mb-4">
-                    <div class="row card-body">
-                        <div class="col-md-4 mb-4 mb-md-0">
-                            <div class="post-slider slider-sm">
-                                <img src="images/post/post-3.jpg" class="card-img" alt="post-thumb" style="height:200px; object-fit: cover;">
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <h3 class="h4 mb-3"><a class="post-title" href="post-details.html">Advice From a Twenty Something</a></h3>
-                            <ul class="card-meta list-inline">
-                                <li class="list-inline-item">
-                                    <a href="author-single.html" class="card-meta-author">
-                                        <img src="images/john-doe.jpg">
-                                        <span>Mark Dinn</span>
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <i class="ti-calendar"></i>14 jan, 2020
-                                </li>
-                            </ul>
-                            <p>It’s no secret that the digital industry is booming. From exciting startups to global brands</p>
-                            <a href="post-details.html" class="btn btn-outline-primary">Read More</a>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="card mb-4">
-                    <div class="row card-body">
-                        <div class="col-md-4 mb-4 mb-md-0">
-                            <div class="post-slider slider-sm">
-                                <img src="images/post/post-7.jpg" class="card-img" alt="post-thumb" style="height:200px; object-fit: cover;">
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <h3 class="h4 mb-3"><a class="post-title" href="post-details.html">Advice From a Twenty Something</a></h3>
-                            <ul class="card-meta list-inline">
-                                <li class="list-inline-item">
-                                    <a href="author-single.html" class="card-meta-author">
-                                        <img src="images/john-doe.jpg">
-                                        <span>Charls Xaviar</span>
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <i class="ti-calendar"></i>14 jan, 2020
-                                </li>
-                            </ul>
-                            <p> It’s no secret that the digital industry is booming. From exciting startups to global brands</p>
-                            <a href="post-details.html" class="btn btn-outline-primary">Read More</a>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="card mb-4">
-                    <div class="row card-body">
-                        <div class="col-12">
-                            <h3 class="h4 mb-3"><a class="post-title" href="post-details.html">Cheerful Loving Couple Bakers Drinking Coffee</a></h3>
-                            <ul class="card-meta list-inline">
-                                <li class="list-inline-item">
-                                    <a href="author-single.html" class="card-meta-author">
-                                        <img src="images/kate-stone.jpg" alt="Kate Stone">
-                                        <span>Kate Stone</span>
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <i class="ti-calendar"></i>14 jan, 2020
-                                </li>
-                            </ul>
-                            <p>It’s no secret that the digital industry is booming. From exciting startups to global brands, companies are reaching out to digital agencies, responding to the new possibilities available.</p>
-                            <a href="post-details.html" class="btn btn-outline-primary">Read More</a>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="card mb-4">
-                    <div class="row card-body">
-                        <div class="col-md-4 mb-4 mb-md-0">
-                            <div class="post-slider slider-sm">
-                                <img src="images/post/post-5.jpg" class="card-img" alt="post-thumb" style="height:200px; object-fit: cover;">
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <h3 class="h4 mb-3"><a class="post-title" href="post-details.html">How To Make Cupcakes and Cashmere Recipe At Home</a></h3>
-                            <ul class="card-meta list-inline">
-                                <li class="list-inline-item">
-                                    <a href="author-single.html" class="card-meta-author">
-                                        <img src="images/kate-stone.jpg" alt="Kate Stone">
-                                        <span>Kate Stone</span>
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <i class="ti-calendar"></i>14 jan, 2020
-                                </li>
-                            </ul>
-                            <p>It’s no secret that the digital industry is booming. From exciting startups to global brands</p>
-                            <a href="post-details.html" class="btn btn-outline-primary">Read More</a>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="card mb-4">
-                    <div class="row card-body">
-                        <div class="col-md-4 mb-4 mb-md-0">
-                            <div class="post-slider slider-sm">
-                                <img src="images/post/post-8.jpg" class="card-img" alt="post-thumb" style="height:200px; object-fit: cover;">
-                                <img src="images/post/post-9.jpg" class="card-img" alt="post-thumb" style="height:200px; object-fit: cover;">
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <h3 class="h4 mb-3"><a class="post-title" href="post-details.html">How To Make Cupcakes and Cashmere Recipe At Home</a></h3>
-                            <ul class="card-meta list-inline">
-                                <li class="list-inline-item">
-                                    <a href="author-single.html" class="card-meta-author">
-                                        <img src="images/john-doe.jpg" alt="John Doe">
-                                        <span>John Doe</span>
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <i class="ti-calendar"></i>14 jan, 2020
-                                </li>
-                            </ul>
-                            <p>It’s no secret that the digital industry is booming. From exciting startups to global brands</p>
-                            <a href="post-details.html" class="btn btn-outline-primary">Read More</a>
-                        </div>
-                    </div>
-                </article>
+                    </article>
+                }
 
                 <article class="card mb-4">
                     <div class="row card-body">
@@ -301,105 +224,6 @@
                             </ul>
                             <p>Heading example Here is example of hedings. You can use this heading by following markdownify rules.</p>
                             <a href="post-elements.html" class="btn btn-outline-primary">Read More</a>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="card mb-4">
-                    <div class="row card-body">
-                        <div class="col-md-4 mb-4 mb-md-0">
-                            <div class="post-slider slider-sm">
-                                <img src="images/post/post-3.jpg" class="card-img" alt="post-thumb" style="height:200px; object-fit: cover;">
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <h3 class="h4 mb-3"><a class="post-title" href="post-details.html">Advice From a Twenty Something</a></h3>
-                            <ul class="card-meta list-inline">
-                                <li class="list-inline-item">
-                                    <a href="author-single.html" class="card-meta-author">
-                                        <img src="images/john-doe.jpg">
-                                        <span>Mark Dinn</span>
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <i class="ti-calendar"></i>14 jan, 2020
-                                </li>
-                            </ul>
-                            <p>It’s no secret that the digital industry is booming. From exciting startups to global brands</p>
-                            <a href="post-details.html" class="btn btn-outline-primary">Read More</a>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="card mb-4">
-                    <div class="row card-body">
-                        <div class="col-md-4 mb-4 mb-md-0">
-                            <div class="post-slider slider-sm">
-                                <img src="images/post/post-7.jpg" class="card-img" alt="post-thumb" style="height:200px; object-fit: cover;">
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <h3 class="h4 mb-3"><a class="post-title" href="post-details.html">Advice From a Twenty Something</a></h3>
-                            <ul class="card-meta list-inline">
-                                <li class="list-inline-item">
-                                    <a href="author-single.html" class="card-meta-author">
-                                        <img src="images/john-doe.jpg">
-                                        <span>Charls Xaviar</span>
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <i class="ti-calendar"></i>14 jan, 2020
-                                </li>
-                            </ul>
-                            <p> It’s no secret that the digital industry is booming. From exciting startups to global brands</p>
-                            <a href="post-details.html" class="btn btn-outline-primary">Read More</a>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="card mb-4">
-                    <div class="row card-body">
-                        <div class="col-12">
-                            <h3 class="h4 mb-3"><a class="post-title" href="post-details.html">Cheerful Loving Couple Bakers Drinking Coffee</a></h3>
-                            <ul class="card-meta list-inline">
-                                <li class="list-inline-item">
-                                    <a href="author-single.html" class="card-meta-author">
-                                        <img src="images/kate-stone.jpg" alt="Kate Stone">
-                                        <span>Kate Stone</span>
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <i class="ti-calendar"></i>14 jan, 2020
-                                </li>
-                            </ul>
-                            <p>It’s no secret that the digital industry is booming. From exciting startups to global brands, companies are reaching out to digital agencies, responding to the new possibilities available.</p>
-                            <a href="post-details.html" class="btn btn-outline-primary">Read More</a>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="card mb-4">
-                    <div class="row card-body">
-                        <div class="col-md-4 mb-4 mb-md-0">
-                            <div class="post-slider slider-sm">
-                                <img src="images/post/post-5.jpg" class="card-img" alt="post-thumb" style="height:200px; object-fit: cover;">
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <h3 class="h4 mb-3"><a class="post-title" href="post-details.html">How To Make Cupcakes and Cashmere Recipe At Home</a></h3>
-                            <ul class="card-meta list-inline">
-                                <li class="list-inline-item">
-                                    <a href="author-single.html" class="card-meta-author">
-                                        <img src="images/kate-stone.jpg" alt="Kate Stone">
-                                        <span>Kate Stone</span>
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <i class="ti-calendar"></i>14 jan, 2020
-                                </li>
-                            </ul>
-                            <p>It’s no secret that the digital industry is booming. From exciting startups to global brands</p>
-                            <a href="post-details.html" class="btn btn-outline-primary">Read More</a>
                         </div>
                     </div>
                 </article>

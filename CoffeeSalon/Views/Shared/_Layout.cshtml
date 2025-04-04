@@ -21,7 +21,7 @@
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-white">
                 <a class="navbar-brand order-1" asp-controller="Home" asp-action="Index">
-                    <img class="img-fluid" width="100" src="~/images/logo.png"
+                    <img class="img-fluid" width="100" src="~/images/finalLogo.png"
                     alt="Reader | Hugo Personal Blog Template">
                 </a>
                 <div class="collapse navbar-collapse text-center order-lg-2 order-3" id="navigation">
@@ -46,21 +46,14 @@
                         @if (ViewBag.UserName != "" && ViewBag.UserName != null && ViewBag.Role != "admin")
                         {
                             <li class="nav-item dropdown" style="margin-left:50px;">
-                                <a class="nav-link" asp-controller="Home" asp-action="logout" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add a Review</a>
+                                <a class="nav-link" asp-controller="Home" asp-action="AddReviewInUser" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add a Review</a>
                             </li>
 
                             <li class="nav-item dropdown" style="margin-left:50px;">
                                 <a class="nav-link" asp-controller="Home" asp-action="logout" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Logout</a>
                             </li>
                         }
-                        else
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link" asp-controller="Home" asp-action="login" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login</a>
-                            </li>
-                        }
-
-                        @if (ViewBag.Role == "admin")
+                        else if (ViewBag.Role == "admin")
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link" asp-controller="Admin" asp-action="UsersAdmin" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin Dashboard</a>
@@ -69,8 +62,26 @@
                             <li class="nav-item dropdown" style="margin-left:50px;">
                                 <a class="nav-link" asp-controller="Home" asp-action="logout" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Logout</a>
                             </li>
+                        } 
+                        else
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link" asp-controller="Home" asp-action="login" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login</a>
+                            </li>
                         }
+
+                        @* @if (ViewBag.Role == "admin") *@
+                        @* { *@
+                        @*     <li class="nav-item dropdown"> *@
+                        @*         <a class="nav-link" asp-controller="Admin" asp-action="UsersAdmin" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin Dashboard</a> *@
+                        @*     </li> *@
+
+                        @*     <li class="nav-item dropdown" style="margin-left:50px;"> *@
+                        @*         <a class="nav-link" asp-controller="Home" asp-action="logout" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Logout</a> *@
+                        @*     </li> *@
+                        @* } *@
                     </ul>
+                </div>
             </nav>
         </div>
     </header>
@@ -97,7 +108,7 @@
                     </ul>
                 </div>
                 <div class="col-md-2 text-center mb-4">
-                    <a href="index.html"><img class="img-fluid" width="100px" src="images/logo.png" alt="Reader | Hugo Personal Blog Template"></a>
+                    <a href="index.html"><img class="img-fluid" width="100" src="images/newLogo.png" alt="CoffeeSalon | Review Spot"></a>
                 </div>
                 <div class="col-md-5 text-md-right text-center mb-4">
                     <ul class="list-inline footer-list mb-0">

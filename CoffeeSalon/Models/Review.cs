@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CoffeeSalon.Models
 {
-
-
     public class Review
     {
         public Review()
