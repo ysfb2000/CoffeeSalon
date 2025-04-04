@@ -19,6 +19,8 @@ namespace CoffeeSalon.Models
 
         public User? User { get; set; }
 
+        public string Category { get; set; } = "Coffee";
+
         [Required]
         [MaxLength(200)]
         public required string ItemName { get; set; }
