@@ -22,9 +22,11 @@ namespace CoffeeSalon.Controllers
         {
             HttpContext.Session.SetString("UserName", "ysfb2000");
             HttpContext.Session.SetString("Role", "admin");
+            HttpContext.Session.SetString("UserId", "1");
 
             ViewBag.UserName = HttpContext.Session.GetString("UserName");
             ViewBag.Role = HttpContext.Session.GetString("Role");
+            ViewBag.UserId = HttpContext.Session.GetString("UserId");
             return View();
         }
 
@@ -66,7 +68,8 @@ namespace CoffeeSalon.Controllers
                 if (result.IsSuccess)
                 {
                     HttpContext.Session.SetString("UserName", model.UserName);
-                    HttpContext.Session.SetString("Role", result.Value);
+                    HttpContext.Session.SetString("Role", result.Value.Role);
+                    HttpContext.Session.SetString("UserId", result.Value.UserId.ToString());
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -158,9 +161,9 @@ namespace CoffeeSalon.Controllers
             return RedirectToAction("ReviewsAdmin", "Home");
         }
 
-        public IActionResult DeleteReview(Review review)
+        public IActionResult DeleteReview(int reviewId)
         {
-            var result = _reviewService.DeleteReview(review);
+            var result = _reviewService.DeleteReview(reviewId);
             return RedirectToAction("ReviewsAdmin", "Home");
         }
 

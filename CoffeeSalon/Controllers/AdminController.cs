@@ -18,7 +18,16 @@ namespace CoffeeSalon.Controllers
 
         public IActionResult AddReviewInAdmin()
         {
-            return View();
+            var review = new Review
+            {
+                ItemName = string.Empty,
+                ReviewText = string.Empty,
+                ReviewId = 0
+            };
+
+            ViewData["Title"] = "Add";
+
+            return View("AddReviewInAdmin", review);
         }
 
         public IActionResult UsersAdmin()
@@ -58,17 +67,12 @@ namespace CoffeeSalon.Controllers
             return RedirectToAction("ReviewsAdmin", "Admin");
         }
 
-        public IActionResult DeleteReview(Review review)
+        public IActionResult DeleteReview(string reviewId)
         {
-            var result = _reviewService.DeleteReview(review);
+            var result = _reviewService.DeleteReview(int.Parse(reviewId));
             return RedirectToAction("ReviewsAdmin", "Admin");
         }
 
-        public IActionResult UpdateReview(Review review)
-        {
-            var result = _reviewService.UpdateReview(review);
-            return RedirectToAction("ReviewsAdmin", "Admin");
-        }
 
         public IActionResult GetReviewById(int id)
         {
@@ -91,6 +95,7 @@ namespace CoffeeSalon.Controllers
                 }
 
                 review.DatePosted = DateTime.Now;
+                review.UserId = int.Parse(HttpContext.Session.GetString("UserId") ?? "");
 
                 _reviewService.AddReview(review);
 
@@ -98,6 +103,49 @@ namespace CoffeeSalon.Controllers
             }
 
             return View(review);
+        }
+
+        public IActionResult UpdateReview(int id)
+        {
+            var review = _reviewService.GetReviewById(id).Value;
+            if (review == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Title"] = "Edit";
+
+            return View("AddReviewInAdmin", review);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Review review, IFormFile? ImageFile)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingReview = _reviewService.GetReviewById(review.ReviewId).Value;
+                if (existingReview == null) return NotFound();
+
+                // Update fields
+                existingReview.ItemName = review.ItemName;
+                existingReview.Rating = review.Rating;
+                existingReview.ReviewText = review.ReviewText;
+
+                if (ImageFile != null)
+                {
+                    using var stream = new MemoryStream();
+                    await ImageFile.CopyToAsync(stream);
+                    existingReview.Image = stream.ToArray();
+                }
+
+                _reviewService.UpdateReview(existingReview);
+
+
+                return RedirectToAction("ReviewsAdmin", "Admin");
+            }
+
+            return View("AddReviewInAdmin", review);
         }
     }
 }

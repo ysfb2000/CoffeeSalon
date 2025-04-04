@@ -29,8 +29,8 @@
                 <td>@review?.DatePosted.ToString("yyyy-MM-dd")</td>
 				<td></td>
 				<td>
-                    <a href="@Url.Action("UpdateReview", "Admin", new { review = review })" class="edit-btn">Edit</a>
-                    <a href="@Url.Action("DeleteReview", "Admin", new { review = review })" class="delete-btn">Delete</a>
+                    <a href="@Url.Action("UpdateReview", "Admin", new { id = review?.ReviewId })" class="edit-btn">Edit</a>
+                    <a href="@Url.Action("DeleteReview", "Admin", new { reviewId = review?.ReviewId })" class="delete-btn">Delete</a>
 				</td>
 			</tr>
 		}

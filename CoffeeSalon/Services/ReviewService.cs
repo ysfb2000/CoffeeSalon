@@ -1,5 +1,6 @@
 ﻿using CoffeeSalon.Data;
 using CoffeeSalon.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CoffeeSalon.Services
 {
@@ -13,7 +14,9 @@ namespace CoffeeSalon.Services
 
         public Result<List<Review>> GetReviewList()
         {
-            var list = _context.Reviews.ToList();
+            var list = _context.Reviews
+                .Include(r => r.User)
+                .ToList();
             var result = new Result<List<Review>>();
             result.Value = list;
             return result;
@@ -36,21 +39,32 @@ namespace CoffeeSalon.Services
             return result;
         }
 
-        public Result DeleteReview(Review review) 
+        public Result DeleteReview(int reviewId)
         {
             var result = new Result();
             try
             {
-                _context.Reviews.Remove(review);
-                _context.SaveChanges();
-                result.IsSuccess = true;
+                var review = _context.Reviews.FirstOrDefault(r => r.ReviewId == reviewId);
+                if (review != null)
+                {
+                    _context.Reviews.Remove(review);
+                    _context.SaveChanges();
+                    result.IsSuccess = true;
+                }
+                else
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Review not found";
+                }
             }
             catch (Exception ex)
             {
                 result.IsSuccess = false;
                 result.Message = ex.Message;
             }
+
             return result;
+
         }
 
         public Result UpdateReview(Review review)
