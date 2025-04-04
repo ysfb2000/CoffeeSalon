@@ -7,7 +7,7 @@ namespace CoffeeSalon.Services
     {
         public Result<List<User>> GetUserList();
 
-        public Result Login(string username, string password);
+        public Result<User> Login(string username, string password);
 
         public Result Register(string username, string password);
 

@@ -27,7 +27,7 @@ namespace CoffeeSalon.Data
             // Configure relationship: one User has many Reviews
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.User)
-                .WithMany()
+                .WithMany(r => r.Reviews)
                 .HasForeignKey(r => r.UserId);
         }
     }

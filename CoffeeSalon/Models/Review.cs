@@ -6,8 +6,12 @@ namespace CoffeeSalon.Models
 {
 
 
-    public class Review()
+    public class Review
     {
+        public Review()
+        {
+        }
+
         [Key]
         public int ReviewId { get; set; }
 

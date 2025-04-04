@@ -81,10 +81,10 @@ namespace CoffeeSalon.Services
         }
 
 
-        public Result Login(string username, string password)
+        public Result<User> Login(string username, string password)
         {
             var user = _context.Users.FirstOrDefault(u => u.Username == username);
-            var result = new Result();
+            var result = new Result<User>();
 
             if (user == null)
             {
@@ -101,7 +101,7 @@ namespace CoffeeSalon.Services
                 return result;
             }
 
-            result.Value = user.Role;
+            result.Value = user;
 
             return result;
         }

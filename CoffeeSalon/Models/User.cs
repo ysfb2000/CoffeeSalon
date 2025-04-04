@@ -20,6 +20,8 @@ namespace CoffeeSalon.Models
         [Required]
         [MaxLength(20)]
         public required string Role { get; set; }  // "user" or "admin"
+
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 
 }
