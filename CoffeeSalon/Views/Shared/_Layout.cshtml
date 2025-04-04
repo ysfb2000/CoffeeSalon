@@ -33,30 +33,44 @@
                         @if (ViewBag.UserName != "" && ViewBag.UserName != null) {
 
                             <li class="nav-item dropdown" style="margin-left: 200px; line-height: 65px; font-weight:600">
-                                Welcom, @ViewBag.UserName
+                                Welcome - @ViewBag.UserName
+                            </li>
+						}
+                    </ul>
+                </div>
+
+                <div class="order-2 order-lg-3 d-flex align-items-center">
+
+                    <ul class="navbar-nav" style="margin-left: 100px;">
+
+                        @if (ViewBag.UserName != "" && ViewBag.UserName != null && ViewBag.Role != "admin")
+                        {
+                            <li class="nav-item dropdown" style="margin-left:50px;">
+                                <a class="nav-link" asp-controller="Home" asp-action="logout" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add a Review</a>
                             </li>
 
                             <li class="nav-item dropdown" style="margin-left:50px;">
                                 <a class="nav-link" asp-controller="Home" asp-action="logout" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Logout</a>
                             </li>
-						}
-						else
-						{
-							<li class="nav-item dropdown">
-								<a class="nav-link" asp-controller="Home" asp-action="login" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login</a>
-							</li>
-						}
-
-						@if (ViewBag.Role == "admin")
-						{
+                        }
+                        else
+                        {
                             <li class="nav-item dropdown">
-                                <a class="nav-link" asp-controller="Admin" asp-action="UsersAdmin" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+                                <a class="nav-link" asp-controller="Home" asp-action="login" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login</a>
                             </li>
-						}
+                        }
 
+                        @if (ViewBag.Role == "admin")
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link" asp-controller="Admin" asp-action="UsersAdmin" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin Dashboard</a>
+                            </li>
 
+                            <li class="nav-item dropdown" style="margin-left:50px;">
+                                <a class="nav-link" asp-controller="Home" asp-action="logout" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Logout</a>
+                            </li>
+                        }
                     </ul>
-                </div>
             </nav>
         </div>
     </header>

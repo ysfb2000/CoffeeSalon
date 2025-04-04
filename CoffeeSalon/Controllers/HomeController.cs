@@ -20,8 +20,9 @@ namespace CoffeeSalon.Controllers
 
         public IActionResult Index()
         {
-            HttpContext.Session.SetString("UserName", "ysfb2000");
-            HttpContext.Session.SetString("Role", "admin");
+            //Commented these line - Sahil Shahbuddin.
+            //HttpContext.Session.SetString("UserName", "ysfb2000");
+            //HttpContext.Session.SetString("Role", "admin");
 
             ViewBag.UserName = HttpContext.Session.GetString("UserName");
             ViewBag.Role = HttpContext.Session.GetString("Role");
