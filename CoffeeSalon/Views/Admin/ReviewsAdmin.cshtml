@@ -11,6 +11,7 @@
         <tr>
             <th>Review ID</th>
             <th>User</th>
+            <th>Category</th>
             <th>Item</th>
             <th>Rating</th>
             <th>Date</th>
@@ -22,8 +23,9 @@
 		@foreach (var review in Model)
 		{
 			<tr>
-				<td>@review.ReviewId</td>
+				<td>@review.ReviewId</td> 
 				<td>@review?.User?.Username</td>
+                <td>@review?.Category</td>
 				<td>@review?.ItemName</td>
 				<td>@review?.Rating</td>
                 <td>@review?.DatePosted.ToString("yyyy-MM-dd")</td>

@@ -1,6 +1,7 @@
 using CoffeeSalon.Models;
 using CoffeeSalon.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoffeeSalon.Controllers
@@ -63,7 +64,14 @@ namespace CoffeeSalon.Controllers
 
         public IActionResult AddReview(Review review)
         {
-            
+            ViewBag.Categories = new List<SelectListItem>
+            {
+               new SelectListItem { Value = "Coffee", Text = "Coffee" },
+               new SelectListItem { Value = "Tea", Text = "Tea" },
+               new SelectListItem { Value = "Juice", Text = "Juice" },
+               new SelectListItem { Value = "Dessert", Text = "Dessert" }
+            };
+
             return RedirectToAction("ReviewsAdmin", "Admin");
         }
 
@@ -107,6 +115,14 @@ namespace CoffeeSalon.Controllers
 
         public IActionResult UpdateReview(int id)
         {
+            ViewBag.Categories = new List<SelectListItem>
+            {
+               new SelectListItem { Value = "Coffee", Text = "Coffee" },
+               new SelectListItem { Value = "Tea", Text = "Tea" },
+               new SelectListItem { Value = "Juice", Text = "Juice" },
+               new SelectListItem { Value = "Dessert", Text = "Dessert" }
+            };
+
             var review = _reviewService.GetReviewById(id).Value;
             if (review == null)
             {
@@ -131,6 +147,9 @@ namespace CoffeeSalon.Controllers
                 existingReview.ItemName = review.ItemName;
                 existingReview.Rating = review.Rating;
                 existingReview.ReviewText = review.ReviewText;
+                existingReview.DatePosted = DateTime.Now;
+                existingReview.UserId = int.Parse(HttpContext.Session.GetString("UserId") ?? "");
+                existingReview.Category = review.Category;
 
                 if (ImageFile != null)
                 {
