@@ -242,6 +242,39 @@ namespace CoffeeSalon.Controllers
             return View(review);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Review review, IFormFile? ImageFile)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingReview = _reviewService.GetReviewById(review.ReviewId).Value;
+                if (existingReview == null) return NotFound();
+
+                // Update fields
+                existingReview.ItemName = review.ItemName;
+                existingReview.Rating = review.Rating;
+                existingReview.ReviewText = review.ReviewText;
+                existingReview.DatePosted = DateTime.Now;
+                existingReview.UserId = int.Parse(HttpContext.Session.GetString("UserId") ?? "");
+                existingReview.Category = review.Category;
+
+                if (ImageFile != null)
+                {
+                    using var stream = new MemoryStream();
+                    await ImageFile.CopyToAsync(stream);
+                    existingReview.Image = stream.ToArray();
+                }
+
+                _reviewService.UpdateReview(existingReview);
+
+
+                return RedirectToAction("ReviewsAdmin", "Admin");
+            }
+
+            return View("AddReviewInAdmin", review);
+        }
+
 
     }
 }

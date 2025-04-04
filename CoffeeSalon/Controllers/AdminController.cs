@@ -127,6 +127,10 @@ namespace CoffeeSalon.Controllers
 
         public IActionResult UpdateReview(int id)
         {
+            ViewBag.UserName = HttpContext.Session.GetString("UserName");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+            ViewBag.UserId = HttpContext.Session.GetString("UserId");
+
             ViewBag.Categories = new List<SelectListItem>
             {
                new SelectListItem { Value = "Coffee", Text = "Coffee" },

@@ -34,7 +34,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-9 mx-auto">
-                <h1 class="mb-4">Add a Review for a Coffee Shop</h1>
+                <h1 class="mb-4">Update a Review for a Coffee Shop</h1>
             </div>
         </div>
     </div>
@@ -95,7 +95,7 @@
                     <p>Your review means the world to us. Whether you have a suggestion, opinion or just want to say anything, we’re here and ready to listen. Be a part of a CoffeeSalon Community.</p>
                 </div>
 
-                <form asp-action="Create" enctype="multipart/form-data" method="post">
+                <form asp-action="@(Model.ReviewId == 0 ? "Create" : "Edit")" asp-controller="Admin" enctype="multipart/form-data" method="post">
                     <div class="form-group">
                         <label asp-for="ItemName" for="ItemName">Item Name (Required)</label>
                         <input asp-for="ItemName" type="text" name="ItemName" id="ItemName" class="form-control" placeholder="Enter item name" required>
@@ -142,7 +142,7 @@
                          } 
                      </div> 
 
-                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                    <button type="submit" class="btn btn-primary">Edit Review</button>
                 </form>
 
             </div>
