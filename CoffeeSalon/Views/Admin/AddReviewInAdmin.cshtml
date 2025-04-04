@@ -96,27 +96,31 @@
                 </div>
 
                 <form asp-action="@(Model.ReviewId == 0 ? "Create" : "Edit")" asp-controller="Admin" enctype="multipart/form-data" method="post">
+
+                    @if (Model.ReviewId != 0)
+                    {
+                        <input type="hidden" asp-for="ReviewId" />
+                    }
+                    
                     <div class="form-group">
                         <label asp-for="ItemName" for="ItemName">Item Name (Required)</label>
                         <input asp-for="ItemName" type="text" name="ItemName" id="ItemName" class="form-control" placeholder="Enter item name" required>
                         <span asp-validation-for="ItemName" class="text-danger"></span>
                     </div>
 
-                    @* <div class="form-group"> *@
-                    @*     <label asp-for="" for="ItemName">Shop Name (Required)</label> *@
-                    @*     <input type="text" name="ItemName" id="ItemName" class="form-control" placeholder="Enter item name" required> *@
-                    @* </div> *@
+                    <div class="form-group">
+                        <label asp-for="Category">Category (Required)</label>
+                        <select asp-for="Category" asp-items="ViewBag.Categories" class="form-control">
+                            <option value="">-- Select Category --</option>
+                        </select>
+                        <span asp-validation-for="Category" class="text-danger"></span>
+                    </div>
+
 
                     <div class="form-group">
-                        <div class="star-rating" id="star-rating">
-                            <label asp-for="Rating" for="ReviewText">Rating </label>
-                            <span class="star" data-value="1">&#9733;</span>
-                            <span class="star" data-value="2">&#9733;</span>
-                            <span class="star" data-value="3">&#9733;</span>
-                            <span class="star" data-value="4">&#9733;</span>
-                            <span class="star" data-value="5">&#9733;</span>
-                        </div>
-                        <input asp-for="Rating" type="hidden" name="Rating" id="rating-input" value="0">
+                        <label asp-for="Rating"></label>
+                        <input asp-for="Rating" type="number" class="form-control" placeholder="(1-5)" min="1" max="5" />
+                        <span asp-validation-for="Rating" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
@@ -126,7 +130,7 @@
 
                     <div class="form-group">
                         <label asp-for="Image" for="Image">Upload Image</label>
-                        <input type="file" name="Image" id="Image" class="form-control" />
+                        <input type="file" name="ImageFile" id="ImageFile" class="form-control" style="height:auto" />
                     </div>
 
                     <div> 
@@ -142,7 +146,7 @@
                          } 
                      </div> 
 
-                    <button type="submit" class="btn btn-primary">Edit Review</button>
+                    <button type="submit" class="btn btn-primary mt-5">Edit Review</button>
                 </form>
 
             </div>
@@ -150,51 +154,11 @@
     </div>
 </section>
 
+
+@section Scripts {
 <script>
-    // JavaScript to handle hover and click events for rating
-    const stars = document.querySelectorAll('.star');
-    const ratingInput = document.getElementById('rating-input');
 
-    // Handle hover to change color of stars
-    stars.forEach(star => {
-        star.addEventListener('mouseenter', () => {
-            const value = parseInt(star.getAttribute('data-value'));
-            resetStars();
-            highlightStars(value);
-        });
-
-        // Handle click to select the rating
-        star.addEventListener('click', () => {
-            const value = parseInt(star.getAttribute('data-value'));
-            ratingInput.value = value;  // Set the rating in the hidden input
-        });
-    });
-
-    // Reset all stars' color
-    function resetStars() {
-        stars.forEach(star => {
-            star.classList.remove('selected');
-        });
-    }
-
-    // Highlight stars based on the value
-    function highlightStars(value) {
-        stars.forEach(star => {
-            if (parseInt(star.getAttribute('data-value')) <= value) {
-                star.classList.add('selected');
-            }
-        });
-    }
-
-    // Reset stars on mouse leave
-    document.querySelector('.star-rating').addEventListener('mouseleave', () => {
-        resetStars();
-        if (ratingInput.value > 0) {
-            highlightStars(ratingInput.value);
-        }
-    });
-
-    document.getElementById('imageInput').addEventListener('change', function (event) {
+        document.getElementById('ImageFile').addEventListener('change', function (event) {
             const preview = document.getElementById('imagePreview');
             const file = event.target.files[0];
 
@@ -211,8 +175,11 @@
                 preview.src = '';
                 preview.style.display = 'none';
             }
-        });
+     });
+
+
 </script>
+}
 
 @* @model CoffeeSalon.Models.Review *@
 

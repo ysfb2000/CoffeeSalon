@@ -21,9 +21,9 @@ namespace CoffeeSalon.Controllers
 
         public IActionResult Index()
         {
-            //HttpContext.Session.SetString("UserName", "ysfb2000");
-            //HttpContext.Session.SetString("Role", "admin");
-            //HttpContext.Session.SetString("UserId", "1");
+            HttpContext.Session.SetString("UserName", "ysfb2000");
+            HttpContext.Session.SetString("Role", "admin");
+            HttpContext.Session.SetString("UserId", "1");
 
             // You can also use ViewBag to store session data if needed
             ViewBag.UserName = HttpContext.Session.GetString("UserName");

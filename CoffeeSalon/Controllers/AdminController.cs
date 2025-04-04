@@ -139,6 +139,8 @@ namespace CoffeeSalon.Controllers
                new SelectListItem { Value = "Dessert", Text = "Dessert" }
             };
 
+            if (id == 0) id = TempData["ReviewId"] != null ? (int?)TempData["ReviewId"] ?? 0 : 0;
+
             var review = _reviewService.GetReviewById(id).Value;
             if (review == null)
             {
@@ -180,7 +182,9 @@ namespace CoffeeSalon.Controllers
                 return RedirectToAction("ReviewsAdmin", "Admin");
             }
 
-            return View("AddReviewInAdmin", review);
+            TempData["ReviewId"] = review.ReviewId;
+
+            return RedirectToAction("UpdateReview");
         }
     }
 }

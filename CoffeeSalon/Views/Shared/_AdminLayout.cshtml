@@ -98,7 +98,6 @@
     <!-- JS Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/lib/slick/slick.min.js"></script>
     <script src="~/lib/instafeed/instafeed.min.js"></script>
 
@@ -108,27 +107,3 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-
-
-@* <!DOCTYPE html> *@
-@* <html lang="en"> *@
-@* <head> *@
-@*     <meta charset="UTF-8"> *@
-@*     <title>@ViewBag.Title</title> *@
-@*     <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" /> *@
-@* </head> *@
-@* <body> *@
-@*     <div class="sidebar"> *@
-@*         <h2>Admin Panel</h2> *@
-@*         <a class="nav-link" asp-controller="Admin" asp-action="UsersAdmin" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Users</a> *@
-@*         <a class="nav-link" asp-controller="Admin" asp-action="ReviewsAdmin" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Reviews</a> *@
-@*         <a class="nav-link" style="margin-top: 50px;" asp-controller="Home" asp-action="Index" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Back to Homepage</a> *@
-@*     </div> *@
-
-@*     <div class="main-content"> *@
-@* 		@RenderBody() *@
-@*     </div> *@
-
-@*     @RenderSection("Scripts", required: false) *@
-@* </body> *@
-@* </html> *@
