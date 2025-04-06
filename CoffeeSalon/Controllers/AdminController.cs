@@ -93,6 +93,12 @@ namespace CoffeeSalon.Controllers
             return RedirectToAction("ReviewsAdmin", "Admin");
         }
 
+        public IActionResult DeleteReviewFromDetail(string reviewId)
+        {
+            var result = _reviewService.DeleteReview(int.Parse(reviewId));
+            return RedirectToAction("Index", "Home");
+        }
+
 
         public IActionResult GetReviewById(int id)
         {
@@ -112,14 +118,14 @@ namespace CoffeeSalon.Controllers
                     using var memoryStream = new MemoryStream();
                     await ImageFile.CopyToAsync(memoryStream);
                     review.Image = memoryStream.ToArray();
-                }
+                }   
 
                 review.DatePosted = DateTime.Now;
                 review.UserId = int.Parse(HttpContext.Session.GetString("UserId") ?? "");
 
                 _reviewService.AddReview(review);
 
-                return RedirectToAction("AddReviewInAdmin", "Admin");
+                return RedirectToAction("Index", "Home");
             }
 
             return View(review);
@@ -130,6 +136,7 @@ namespace CoffeeSalon.Controllers
             ViewBag.UserName = HttpContext.Session.GetString("UserName");
             ViewBag.Role = HttpContext.Session.GetString("Role");
             ViewBag.UserId = HttpContext.Session.GetString("UserId");
+            ViewBag.Rating = HttpContext.Session.GetString("Rating");
 
             ViewBag.Categories = new List<SelectListItem>
             {
@@ -178,8 +185,7 @@ namespace CoffeeSalon.Controllers
 
                 _reviewService.UpdateReview(existingReview);
 
-
-                return RedirectToAction("ReviewsAdmin", "Admin");
+                return RedirectToAction("Index", "Home");
             }
 
             TempData["ReviewId"] = review.ReviewId;

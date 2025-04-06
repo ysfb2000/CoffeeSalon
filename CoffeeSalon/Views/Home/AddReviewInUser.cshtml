@@ -1,8 +1,9 @@
-﻿@{
+﻿
+@model CoffeeSalon.Models.Review
+
+@{
     ViewData["Title"] = "Add Review";
 }
-
-@model CoffeeSalon.Models.Review
 
 <style>
     .star-rating {
@@ -93,18 +94,21 @@
                     <p>Your review means the world to us. Whether you have a suggestion, opinion or just want to say anything, we’re here and ready to listen. Be a part of a CoffeeSalon Community.</p>
                 </div>
 
-                <form asp-action="Edit" asp-controller="Home" enctype="multipart/form-data" method="post">
+                <form asp-action="Create" asp-controller="Admin" enctype="multipart/form-data" method="post">
                     <div class="form-group">
                         <label asp-for="ItemName" for="ItemName">Item Name (Required)</label>
                         <input asp-for="ItemName" type="text" name="ItemName" id="ItemName" class="form-control" placeholder="Enter item name" required>
                         <span asp-validation-for="ItemName" class="text-danger"></span>
                     </div>
-
-                    @* <div class="form-group"> *@
-                    @*     <label asp-for="" for="ItemName">Shop Name (Required)</label> *@
-                    @*     <input type="text" name="ItemName" id="ItemName" class="form-control" placeholder="Enter item name" required> *@
-                    @* </div> *@
                     
+                    <div class="form-group">
+                        <label asp-for="Category">Category (Required)</label>
+                        <select asp-for="Category" asp-items="ViewBag.Categories" class="form-control">
+                            <option value="">-- Select Category --</option>
+                        </select>
+                        <span asp-validation-for="Category" class="text-danger"></span>
+                    </div>
+
                     <div class="form-group">
                         <div class="star-rating" id="star-rating">
                             <label asp-for ="Rating" for="ReviewText">Rating </label>
@@ -124,21 +128,8 @@
 
                     <div class="form-group">
                         <label asp-for="Image" for="Image">Upload Image</label>
-                        <input type="file" name="Image" id="Image" class="form-control" />
+                        <input type="file" name="ImageFile" id="Image" class="form-control" multiple/>
                     </div>
-
-                    @* <div> *@
-                    @*     @if (Model.Image != null) *@
-                    @*     { *@
-                    @*         <img id="imagePreview" src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Image)" *@
-                    @*              alt="Review Image" *@
-                    @*              style="max-width: 200px; border-radius: 8px;" /> *@
-                    @*     } *@
-                    @*     else *@
-                    @*     { *@
-                    @*         <img id="imagePreview" src="" alt="Review Image" style="max-width: 200px; border-radius: 8px;" /> *@
-                    @*     } *@
-                    @* </div> *@
 
                     <button type="submit" class="btn btn-primary">Submit Review</button>
                 </form>

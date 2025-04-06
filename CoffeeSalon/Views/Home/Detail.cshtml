@@ -27,11 +27,12 @@
                     <!-- Review Title -->
                     <h1 class="h2">@Model.ItemName</h1>
 
+                    <h3>@Model.Category</h3>
+
                     <!-- Review Metadata -->
                     <ul class="card-meta my-3 list-inline">
                         <li class="list-inline-item">
                             <a href="@Url.Action("UserDetails", "User", new { username = Model.User?.Username })" class="card-meta-author">
-                                @* <img src="@Model.User?.ProfileImageUrl" alt="User Image" class="rounded-circle" width="30"> *@
                                 <span>@Model.User?.Username</span>
                             </a>
                         </li>
@@ -59,25 +60,19 @@
                 </article>
 
                 <div>
-                    <h3 class="mb-4">Leave a Suggestion / Your Point of View</h3>
-                    <form method="POST">
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                                <textarea class="form-control shadow-none" name="comment" rows="7" required></textarea>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <input class="form-control shadow-none" type="text" placeholder="Name" required>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <input class="form-control shadow-none" type="email" placeholder="Email" required>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <input class="form-control shadow-none" type="url" placeholder="Website">
-                                <p class="font-weight-bold valid-feedback">OK! You can skip this field.</p>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary" type="submit">Comment Now</button>
-                    </form>
+                    @if (ViewBag.UserName != "" && ViewBag.UserName != null && Convert.ToInt32(ViewBag.UserId) == Model.UserId || ViewBag.Role == "admin")
+                    {
+                        <!-- Edit Icon --> 
+                        <a href="@Url.Action("UpdateReview", "Admin", new { id = @Model.ReviewId})" style="color: orange; margin-right: 15px;">
+                            <i class="fas fa-edit"></i> <!-- Edit icon -->
+                        </a>
+
+                        <!-- Delete Icon -->
+                        <a href="@Url.Action("DeleteReviewFromDetail", "Admin", new { reviewId = @Model.ReviewId})" style="color: red;">
+                            <i class="fas fa-trash-alt"></i> <!-- Delete icon -->
+                        </a>
+                    }
+                    
                 </div>
             </div>
 

@@ -3,6 +3,7 @@ using CoffeeSalon.Data;
 using CoffeeSalon.Models;
 using CoffeeSalon.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using UsersApp.ViewModels;
 
@@ -21,9 +22,9 @@ namespace CoffeeSalon.Controllers
 
         public IActionResult Index()
         {
-            HttpContext.Session.SetString("UserName", "ysfb2000");
-            HttpContext.Session.SetString("Role", "admin");
-            HttpContext.Session.SetString("UserId", "1");
+            //HttpContext.Session.SetString("UserName", "ysfb2000");
+            //HttpContext.Session.SetString("Role", "admin");
+            //HttpContext.Session.SetString("UserId", "1");
 
             // You can also use ViewBag to store session data if needed
             ViewBag.UserName = HttpContext.Session.GetString("UserName");
@@ -71,6 +72,14 @@ namespace CoffeeSalon.Controllers
             ViewBag.UserName = HttpContext.Session.GetString("UserName");
             ViewBag.Role = HttpContext.Session.GetString("Role");
             ViewBag.UserId = HttpContext.Session.GetString("UserId");
+
+            ViewBag.Categories = new List<SelectListItem>
+            {
+               new SelectListItem { Value = "Coffee", Text = "Coffee" },
+               new SelectListItem { Value = "Tea", Text = "Tea" },
+               new SelectListItem { Value = "Juice", Text = "Juice" },
+               new SelectListItem { Value = "Dessert", Text = "Dessert" }
+            };
             return View();
         }
 
