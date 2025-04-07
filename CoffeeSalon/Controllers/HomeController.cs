@@ -20,7 +20,7 @@ namespace CoffeeSalon.Controllers
             _reviewService = reviewService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string s, string star, string day)
         {
             //HttpContext.Session.SetString("UserName", "ysfb2000");
             //HttpContext.Session.SetString("Role", "admin");
@@ -31,8 +31,13 @@ namespace CoffeeSalon.Controllers
             ViewBag.Role = HttpContext.Session.GetString("Role");
             ViewBag.UserId = HttpContext.Session.GetString("UserId");
 
+            if (ViewBag.UserId == null)
+            {
+                ViewBag.UserId = "0";
+            }
+
             // Get the result of the reviews
-            var reviewsResult = _reviewService.GetReviewList();
+            var reviewsResult = _reviewService.GetReviewList(s, star, day);
 
             // Check if the result is successful and contains reviews
             if (reviewsResult.IsSuccess && reviewsResult.Value != null)
@@ -67,7 +72,7 @@ namespace CoffeeSalon.Controllers
             return View();
         }
 
-        public IActionResult AddReviewInUser()
+        public IActionResult AddReviewInUser(int id)
         {
             ViewBag.UserName = HttpContext.Session.GetString("UserName");
             ViewBag.Role = HttpContext.Session.GetString("Role");
@@ -75,12 +80,64 @@ namespace CoffeeSalon.Controllers
 
             ViewBag.Categories = new List<SelectListItem>
             {
-               new SelectListItem { Value = "Coffee", Text = "Coffee" },
-               new SelectListItem { Value = "Tea", Text = "Tea" },
-               new SelectListItem { Value = "Juice", Text = "Juice" },
-               new SelectListItem { Value = "Dessert", Text = "Dessert" }
+                new SelectListItem { Value = "Brewed Perfection", Text = "Brewed Perfection" },
+                new SelectListItem { Value = "Caffeine", Text = "Caffeine" },
+                new SelectListItem { Value = "Espresso", Text = "Espresso" },
+                new SelectListItem { Value = "Best Coffee Spots", Text = "Best Coffee Spots" },
+                new SelectListItem { Value = "CoffeeReview", Text = "CoffeeReview" },
+                new SelectListItem { Value = "Starbucks", Text = "Starbucks" },
+                new SelectListItem { Value = "Latte", Text = "Latte" },
+                new SelectListItem { Value = "Cappuccino", Text = "Cappuccino" },
+                new SelectListItem { Value = "French Vanilla", Text = "French Vanilla" },
+                new SelectListItem { Value = "Black Coffee", Text = "Black Coffee" },
+                new SelectListItem { Value = "Tim Hortons", Text = "Tim Hortons" },
+                new SelectListItem { Value = "Tea", Text = "Tea" }
             };
-            return View();
+
+            if (id != 0)
+            {
+                var result = _reviewService.GetReviewById(id);
+                if (result.IsSuccess && result.Value != null)
+                {
+                    return View(result.Value);
+                }
+            }
+
+            // Initialize a new Review object
+            var review = new Review
+            {
+                ItemName = string.Empty,
+                ReviewText = string.Empty,
+                ReviewId = 0
+            };
+
+            return View(review);
+        }
+
+
+        // POST: /Review/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Review review, IFormFile? ImageFile)
+        {
+            if (ModelState.IsValid)
+            {
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    using var memoryStream = new MemoryStream();
+                    await ImageFile.CopyToAsync(memoryStream);
+                    review.Image = memoryStream.ToArray();
+                }
+
+                review.DatePosted = DateTime.Now;
+                review.UserId = int.Parse(HttpContext.Session.GetString("UserId") ?? "");
+
+                _reviewService.AddReview(review);
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(review);
         }
 
         [HttpPost]
@@ -158,45 +215,10 @@ namespace CoffeeSalon.Controllers
 
         public IActionResult ReviewsAdmin()
         {
-            var list = _reviewService.GetReviewList().Value;
+            var list = _reviewService.GetReviewList("", "0", "0").Value;
             return View(list);
         }
 
-        public IActionResult SetAsAdmin(string userId)
-        {
-            var result = _userServices.SetAsAdmin(userId);
-            return RedirectToAction("UsersAdmin", "Home");
-        }
-
-        public IActionResult SetAsUser(string userId)
-        {
-            var result = _userServices.SetAsUser(userId);
-            return RedirectToAction("UsersAdmin", "Home");
-        }
-
-        public IActionResult DeleteUser(string userId)
-        {
-            var result = _userServices.DeleteUser(userId);
-            return RedirectToAction("UsersAdmin", "Home");
-        }
-
-        public IActionResult AddReview(Review review)
-        {
-            var result = _reviewService.AddReview(review);
-            return RedirectToAction("ReviewsAdmin", "Home");
-        }
-
-        public IActionResult DeleteReview(int reviewId)
-        {
-            var result = _reviewService.DeleteReview(reviewId);
-            return RedirectToAction("ReviewsAdmin", "Home");
-        }
-
-        public IActionResult UpdateReview(Review review)
-        {
-            var result = _reviewService.UpdateReview(review);
-            return RedirectToAction("ReviewsAdmin", "Home");
-        }
 
         public IActionResult GetReviewById(int id)
         {
@@ -204,31 +226,6 @@ namespace CoffeeSalon.Controllers
             return View(result.Value);
         }
 
-
-        // POST: /Review/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Review review, IFormFile? ImageFile)
-        {
-            if (ModelState.IsValid)
-            {
-                if (ImageFile != null && ImageFile.Length > 0)
-                {
-                    using var memoryStream = new MemoryStream();
-                    await ImageFile.CopyToAsync(memoryStream);
-                    review.Image = memoryStream.ToArray();
-                }
-
-                review.DatePosted = DateTime.Now;
-                review.UserId = int.Parse(HttpContext.Session.GetString("UserId") ?? "");
-
-                _reviewService.AddReview(review);
-
-                return RedirectToAction("Index", "Home");
-            }
-
-            return View(review);
-        }
 
         public IActionResult Detail(int id)
         {
@@ -278,7 +275,7 @@ namespace CoffeeSalon.Controllers
                 _reviewService.UpdateReview(existingReview);
 
 
-                return RedirectToAction("ReviewsAdmin", "Admin");
+                return RedirectToAction("Index", "Home");
             }
 
             return View("AddReviewInAdmin", review);

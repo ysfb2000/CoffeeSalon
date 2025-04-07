@@ -60,13 +60,8 @@
                 </article>
 
                 <div>
-                    @if (ViewBag.UserName != "" && ViewBag.UserName != null && Convert.ToInt32(ViewBag.UserId) == Model.UserId || ViewBag.Role == "admin")
+                    @if (ViewBag.UserName != "" && ViewBag.Role == "admin")
                     {
-                        <!-- Edit Icon --> 
-                        <a href="@Url.Action("UpdateReview", "Admin", new { id = @Model.ReviewId})" style="color: orange; margin-right: 15px;">
-                            <i class="fas fa-edit"></i> <!-- Edit icon -->
-                        </a>
-
                         <!-- Delete Icon -->
                         <a href="@Url.Action("DeleteReviewFromDetail", "Admin", new { reviewId = @Model.ReviewId})" style="color: red;">
                             <i class="fas fa-trash-alt"></i> <!-- Delete icon -->

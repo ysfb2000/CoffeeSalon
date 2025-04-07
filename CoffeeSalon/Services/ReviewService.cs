@@ -12,14 +12,46 @@ namespace CoffeeSalon.Services
             _context = context;
         }
 
-        public Result<List<Review>> GetReviewList()
+        public Result<List<Review>> GetReviewList(string searchString, string star, string day)
         {
-            var list = _context.Reviews
+            var temp = _context.Reviews
                 .Include(r => r.User)
-                .ToList();
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(day) && day != "0")
+            {
+                // get the date from the last days
+                DateTime date = DateTime.Now.AddDays(-int.Parse(day));
+                temp = temp.Where(r => r.DatePosted >= date);
+            }
+
+            if (!string.IsNullOrEmpty(star) && star != "0")
+            {
+                int starValue = int.Parse(star);
+                temp = temp.Where(r => r.Rating == starValue);
+            }
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                temp = temp.Where(r => r.ReviewText.Contains(searchString)  || r.Category.Contains(searchString) || r.ItemName.Contains(searchString));
+            }
+
             var result = new Result<List<Review>>();
-            result.Value = list;
+            try
+            {
+                var reviews = temp.ToList();
+                result.Value = reviews;
+                result.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
+                result.Message = ex.Message;
+            }
+
             return result;
+
+
         }
 
         public Result AddReview(Review review)

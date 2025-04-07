@@ -55,6 +55,10 @@
                         }
                         else if (ViewBag.Role == "admin")
                         {
+                            <li class="nav-item dropdown" style="margin-left:50px;">
+                                <a class="nav-link" asp-controller="Home" asp-action="AddReviewInUser" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add a Review</a>
+                            </li>
+
                             <li class="nav-item dropdown">
                                 <a class="nav-link" asp-controller="Admin" asp-action="UsersAdmin" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin Dashboard</a>
                             </li>
@@ -70,16 +74,6 @@
                             </li>
                         }
 
-                        @* @if (ViewBag.Role == "admin") *@
-                        @* { *@
-                        @*     <li class="nav-item dropdown"> *@
-                        @*         <a class="nav-link" asp-controller="Admin" asp-action="UsersAdmin" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin Dashboard</a> *@
-                        @*     </li> *@
-
-                        @*     <li class="nav-item dropdown" style="margin-left:50px;"> *@
-                        @*         <a class="nav-link" asp-controller="Home" asp-action="logout" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Logout</a> *@
-                        @*     </li> *@
-                        @* } *@
                     </ul>
                 </div>
             </nav>
@@ -102,9 +96,12 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-5 text-center text-md-left mb-4">
-                    <ul class="list-inline footer-list mb-0">
-                        <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
-                        <li class="list-inline-item"><a href="#">Terms Conditions</a></li>
+
+                    <ul class="mb-0" style="list-style-type:none; line-height:20px; text-align: left;">
+                        <li>Developer:</li>
+                        <li style="margin-top: 10px;">Shahbuddin, Sahil</li>
+                        <li>JieLiang Xu</li>
+                        <li>Ahmed, Rumsha</li>
                     </ul>
                 </div>
                 <div class="col-md-2 text-center mb-4">

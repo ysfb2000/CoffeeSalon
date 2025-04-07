@@ -3,6 +3,7 @@ using CoffeeSalon.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CoffeeSalon.Controllers
 {
@@ -52,7 +53,7 @@ namespace CoffeeSalon.Controllers
             ViewBag.Role = HttpContext.Session.GetString("Role");
             ViewBag.UserId = HttpContext.Session.GetString("UserId");
 
-            var list = _reviewService.GetReviewList().Value;
+            var list = _reviewService.GetReviewList("", "0", "0").Value;
             return View(list);
         }
 
@@ -106,30 +107,6 @@ namespace CoffeeSalon.Controllers
             return View(result.Value);
         }
 
-        // POST: /Review/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Review review, IFormFile? ImageFile)
-        {
-            if (ModelState.IsValid)
-            {
-                if (ImageFile != null && ImageFile.Length > 0)
-                {
-                    using var memoryStream = new MemoryStream();
-                    await ImageFile.CopyToAsync(memoryStream);
-                    review.Image = memoryStream.ToArray();
-                }   
-
-                review.DatePosted = DateTime.Now;
-                review.UserId = int.Parse(HttpContext.Session.GetString("UserId") ?? "");
-
-                _reviewService.AddReview(review);
-
-                return RedirectToAction("Index", "Home");
-            }
-
-            return View(review);
-        }
 
         public IActionResult UpdateReview(int id)
         {
@@ -140,10 +117,18 @@ namespace CoffeeSalon.Controllers
 
             ViewBag.Categories = new List<SelectListItem>
             {
-               new SelectListItem { Value = "Coffee", Text = "Coffee" },
-               new SelectListItem { Value = "Tea", Text = "Tea" },
-               new SelectListItem { Value = "Juice", Text = "Juice" },
-               new SelectListItem { Value = "Dessert", Text = "Dessert" }
+                new SelectListItem { Value = "Brewed Perfection", Text = "Brewed Perfection" },
+                new SelectListItem { Value = "Caffeine", Text = "Caffeine" },
+                new SelectListItem { Value = "Espresso", Text = "Espresso" },
+                new SelectListItem { Value = "Best Coffee Spots", Text = "Best Coffee Spots" },
+                new SelectListItem { Value = "CoffeeReview", Text = "CoffeeReview" },
+                new SelectListItem { Value = "Starbucks", Text = "Starbucks" },
+                new SelectListItem { Value = "Latte", Text = "Latte" },
+                new SelectListItem { Value = "Cappuccino", Text = "Cappuccino" },
+                new SelectListItem { Value = "French Vanilla", Text = "French Vanilla" },
+                new SelectListItem { Value = "Black Coffee", Text = "Black Coffee" },
+                new SelectListItem { Value = "Tim Hortons", Text = "Tim Hortons" },
+                new SelectListItem { Value = "Tea", Text = "Tea" }
             };
 
             if (id == 0) id = TempData["ReviewId"] != null ? (int?)TempData["ReviewId"] ?? 0 : 0;
@@ -185,7 +170,7 @@ namespace CoffeeSalon.Controllers
 
                 _reviewService.UpdateReview(existingReview);
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("ReviewsAdmin", "Admin");
             }
 
             TempData["ReviewId"] = review.ReviewId;
