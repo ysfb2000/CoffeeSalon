@@ -42,6 +42,11 @@ namespace CoffeeSalon.Controllers
             ViewBag.Role = HttpContext.Session.GetString("Role");
             ViewBag.UserId = HttpContext.Session.GetString("UserId");
 
+            if (HttpContext.Session.GetString("Role") != "admin")
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
             var list = _userServices.GetUserList().Value;
 
             return View(list);
@@ -49,6 +54,11 @@ namespace CoffeeSalon.Controllers
 
         public IActionResult ReviewsAdmin()
         {
+            if (HttpContext.Session.GetString("Role") != "admin")
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
             ViewBag.UserName = HttpContext.Session.GetString("UserName");
             ViewBag.Role = HttpContext.Session.GetString("Role");
             ViewBag.UserId = HttpContext.Session.GetString("UserId");
@@ -77,6 +87,11 @@ namespace CoffeeSalon.Controllers
 
         public IActionResult AddReview(Review review)
         {
+            if (HttpContext.Session.GetString("Role") != "admin")
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
             ViewBag.Categories = new List<SelectListItem>
             {
                new SelectListItem { Value = "Coffee", Text = "Coffee" },
@@ -110,6 +125,11 @@ namespace CoffeeSalon.Controllers
 
         public IActionResult UpdateReview(int id)
         {
+            if (HttpContext.Session.GetString("Role") != "admin")
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
             ViewBag.UserName = HttpContext.Session.GetString("UserName");
             ViewBag.Role = HttpContext.Session.GetString("Role");
             ViewBag.UserId = HttpContext.Session.GetString("UserId");
